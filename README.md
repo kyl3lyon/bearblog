@@ -1,2 +1,2 @@
 # bearblog
-CSS for personal blog site
+Styles and font for personal blog site
