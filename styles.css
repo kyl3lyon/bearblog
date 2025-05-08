@@ -1,266 +1,198 @@
+/*──────────────────────────────────────────
+  styles.css – dual‑theme, token‑driven
+──────────────────────────────────────────*/
+
+/* 1 ─ Font face
+──────────────────────────────────────────*/
 @font-face {
-    font-family: 'TX02Mono-Regular';
-    src: url('https://intdev-global.s3.us-west-2.amazonaws.com/public/internet-dev/e049dfb6-9c5d-4ac4-97c2-eb6e95c61d09.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'TX02Mono-Regular';
+  src: url('https://intdev-global.s3.us-west-2.amazonaws.com/public/internet-dev/e049dfb6-9c5d-4ac4-97c2-eb6e95c61d09.woff2')
+       format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
+/* 2 ─ Design‑tokens (dark = default)
+──────────────────────────────────────────*/
 :root {
-    --width: 720px;
-    --font-main: 'TX02Mono-Regular', monospace;
-    --font-secondary: 'TX02Mono-Regular', monospace;
-    --font-scale: 1em;
-    --background-color: #01242e;
-    --heading-color: #eee;
-    --text-color: #ddd;
-    --link-color: #8cc2dd;
-    --visited-color: #8cc2dd;
-    --code-background-color: #000;
-    --code-color: #ddd;
-    --blockquote-color: #ccc;
+  --width: 720px;
+  --font-main: 'TX02Mono-Regular', monospace;
+  --font-secondary: 'TX02Mono-Regular', monospace;
+  --font-scale: 1em;
+
+  /* core palette – dark */
+  --background-color:        #01242e;
+  --heading-color:           #eee;
+  --text-color:              #ddd;
+  --link-color:              #8cc2dd;
+  --visited-color:           #8cc2dd;
+  --code-background-color:   #000;
+  --code-color:              #ddd;
+  --blockquote-color:        #ccc;
+
+  /* component palette (inherit page bg for blocks) */
+  --section-bg:              var(--background-color);
+  --section-alt-bg:          #011d27;   /* title bar                 */
+  --table-row-alt-bg:        #01333f;   /* first column / striping   */
+  --border-color:            rgba(221,221,221,.20);
+  --accent-color:            var(--link-color);
 }
 
+/* explicit dark override (kept for clarity) */
 @media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: #01242e;
-        --heading-color: #eee;
-        --text-color: #ddd;
-        --link-color: #8cc2dd;
-        --visited-color: #8cc2dd;
-        --code-background-color: #000;
-        --code-color: #ddd;
-        --blockquote-color: #ccc;
-    }
+  :root { /* same values as above, preserved for easy tweak */ }
 }
 
-/* Base styles */
+/* light palette
+──────────────────────────────────────────*/
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color:        #fafafa;
+    --heading-color:           #222;
+    --text-color:              #333;
+    --link-color:              #0066cc;
+    --visited-color:           #0066cc;
+    --code-background-color:   #f0f0f0;
+    --code-color:              #333;
+    --blockquote-color:        #666;
+
+    --section-bg:              var(--background-color); /* unify blocks + page */
+    --section-alt-bg:          #d0d0d0;  /* darker title bar           */
+    --table-row-alt-bg:        #f0f0f0;  /* lighter than title bar     */
+    --border-color:            rgba(0,0,0,.12);
+    --accent-color:            var(--link-color);
+  }
+}
+
+/* 3 ─ Base layout & scrollbar stability
+──────────────────────────────────────────*/
+html { scrollbar-gutter: stable; }     /* stops header “jump”         */
+
 body {
-    font-family: var(--font-secondary);
-    font-size: var(--font-scale);
-    margin: auto;
-    padding: 20px;
-    max-width: var(--width);
-    text-align: left;
-    background-color: var(--background-color);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.5;
-    color: var(--text-color);
+  font-family: var(--font-secondary);
+  font-size:   var(--font-scale);
+  margin:      auto;
+  padding:     20px;
+  max-width:   var(--width);
+  background:  var(--background-color);
+  color:       var(--text-color);
+  text-align:  left;
+  word-wrap:   break-word;
+  overflow-wrap: break-word;
+  line-height: 1.5;
 }
 
-/* Typography */
+/* 4 ─ Typography
+──────────────────────────────────────────*/
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-main);
-    color: var(--heading-color);
+  font-family: var(--font-main);
+  color:       var(--heading-color);
 }
 
-strong, b {
-    color: var(--heading-color);
-}
+strong, b { color: var(--heading-color); }
+time { font-family: monospace; font-style: normal; }
 
-time {
-    font-family: monospace;
-    font-style: normal;
-}
+/* 5 ─ Links
+──────────────────────────────────────────*/
+a { color: var(--link-color); text-decoration: none; cursor: pointer; }
+a:hover { text-decoration: underline; }
+nav a { margin-right: 8px; }
 
-/* Links */
-a {
-    color: var(--link-color);
-    cursor: pointer;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-nav a {
-    margin-right: 8px;
-}
-
-/* Bio container */
+/* 6 ─ Bio / hero
+──────────────────────────────────────────*/
 .bio-container {
-    display: flex;
-    align-items: flex-start;
-    margin: 0 auto 2em;
-    padding: 20px 0;
-    gap: 40px;
+  display: flex;
+  align-items: flex-start;
+  margin: 0 auto 2em;
+  padding: 20px 0;
+  gap: 40px;
 }
 
+/* text takes remaining space */
 .bio-text {
-    flex: 0 1 auto;
-    max-width: 50%;
+  flex: 1;
+  max-width: calc(100% - 200px);
 }
 
+/* image fixed to 200px wide */
 .bio-image {
-    flex: 0 1 auto;
-    max-width: 35%;
+  flex: 0 0 200px;
+  max-width: 200px;
 }
 
 .bio-image img {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-/* Content elements */
-main {
-    line-height: 1.6;
+/* on small screens make it even smaller */
+@media (max-width: 480px) {
+  .bio-text {
+    max-width: calc(100% - 120px);
+  }
+  .bio-image {
+    flex: 0 0 120px;
+    max-width: 120px;
+  }
 }
 
-table {
-    width: 100%;
-}
+/* 7 ─ Generic content
+──────────────────────────────────────────*/
+main { line-height: 1.6; }
+table { width: 100%; }
+hr    { border: 0; border-top: 1px dashed var(--border-color); }
+img   { max-width: 100%; }
 
-hr {
-    border: 0;
-    border-top: 1px dashed;
-}
-
-img {
-    max-width: 100%;
-}
-
-/* Code and quotes */
+/* 8 ─ Code + quotes */
 code {
-    font-family: monospace;
-    padding: 2px;
-    background-color: var(--code-background-color);
-    color: var(--code-color);
-    border-radius: 3px;
+  font-family: monospace; padding: 2px;
+  background: var(--code-background-color);
+  color:      var(--code-color); border-radius: 3px;
 }
-
 blockquote {
-    border-left: 1px solid #999;
-    color: var(--code-color);
-    padding-left: 20px;
-    font-style: italic;
+  border-left: 1px solid var(--border-color);
+  color: var(--code-color); padding-left: 20px; font-style: italic;
 }
-
 .highlight, .code {
-    padding: 1px 15px;
-    background-color: var(--code-background-color);
-    color: var(--code-color);
-    border-radius: 3px;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    overflow-x: auto;
+  padding: 1px 15px; background: var(--code-background-color);
+  color: var(--code-color); border-radius: 3px;
+  margin-block: 1em; overflow-x: auto;
 }
 
-/* UI Elements */
-button {
-    margin: 0;
-    cursor: pointer;
-}
+/* 9 ─ UI odds‑and‑ends */
+button { margin: 0; cursor: pointer; }
+.title:hover { text-decoration: none; }
+.title h1 { font-size: 1.5em; }
+.inline { width: auto !important; }
 
-.title:hover {
-    text-decoration: none;
-}
+/* 10 ─ Blog post lists */
+ul.blog-posts { list-style: none; padding: 0; }
+ul.blog-posts li { display: flex; }
+ul.blog-posts li span { flex: 0 0 130px; }
+ul.blog-posts li a:visited { color: var(--visited-color); }
 
-.title h1 {
-    font-size: 1.5em;
-}
-
-.inline {
-    width: auto !important;
-}
-
-/* Blog post lists */
-ul.blog-posts {
-    list-style-type: none;
-    padding: unset;
-}
-
-ul.blog-posts li {
-    display: flex;
-}
-
-ul.blog-posts li span {
-    flex: 0 0 130px;
-}
-
-ul.blog-posts li a:visited {
-    color: var(--visited-color);
-}
-
-/* Embedded blog posts */
 ul.embedded.blog-posts li {
-    display: block;
-    padding: 10px 0;
+  display: block; padding: 10px 0; margin-bottom: 2em;
+  border-bottom: 1px solid var(--border-color);
 }
-
+ul.embedded.blog-posts li:last-child { border-bottom: none; }
 ul.embedded.blog-posts li a {
-    display: block;
-    font: bold var(--font-scale) var(--font-secondary);
-    white-space: normal;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 5px 0;
+  display: block; font: bold var(--font-scale) var(--font-secondary);
+  text-decoration: none; padding: 5px 0;
 }
+ul.embedded.blog-posts li a:hover { text-decoration: underline; }
+ul.embedded.blog-posts li time { display: block; margin-bottom: .5em; }
+ul.embedded.blog-posts li p   { margin-top: .5em; line-height: 1.6; }
 
-ul.embedded.blog-posts li a:hover {
-    text-decoration: underline;
-}
+/* 11 ─ Footer */
+footer { padding: 25px 0; text-align: center; color: var(--section-alt-bg); }
+footer a { color: inherit; }
 
-/* Footer */
-footer {
-    padding: 25px 0;
-    text-align: center;
-    color: #345058; /* A slightly lighter version of #01242e */
-}
-
-footer a {
-    color: inherit;
-}
-
-/* Responsive design */
+/* 12 ─ Responsive */
 @media (max-width: 768px) {
-    .bio-container {
-        flex-direction: column;
-        padding: 10px 0;
-        gap: 20px;
-    }
-    
-    .bio-text {
-        max-width: 100%;
-        padding: 0;
-    }
-    
-    .bio-image {
-        width: 100%;
-        max-width: 200px;
-        padding: 0;
-    }
+  .bio-container { flex-direction: column; padding: 10px 0; gap: 20px; }
+  .bio-text, .bio-image { max-width: 100%; }
+  .bio-image { max-width: 200px; }
 }
-
-.posts-section {
-    margin-top: 2em;
-}
-
-.posts-section {
-    margin-bottom: 1em;
-}
-
-ul.embedded.blog-posts li {
-    margin-bottom: 2em;
-    padding-bottom: 1em;
-    border-bottom: 1px solid rgba(221, 221, 221, 0.2);
-}
-
-ul.embedded.blog-posts li:last-child {
-    border-bottom: none;
-}
-
-ul.embedded.blog-posts li time {
-    display: block;
-    margin-bottom: 0.5em;
-}
-
-ul.embedded.blog-posts li a {
-    margin: 0.5em 0;
-}
-
-ul.embedded.blog-posts li p {
-    margin-top: 0.5em;
-    line-height: 1.6;
-}
+.posts-section { margin-block: 2em 1em; }
